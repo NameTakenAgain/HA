@@ -1,0 +1,13 @@
+dalle:
+  entities:
+    - sensor.motion_tvroom
+    - sensor.tvroom_lux
+    - sensor.tvroom_temperature
+    - sensor.tvroom_switch
+    - sensor.tvroom_switch_lastupdated
+    - sensor.motion_dressingroom
+    - sensor.dressingroom_lux
+    - sensor.dressingroom_temperature
+    - sensor.dressingroom_switch
+    - sensor.dressingroom_switch_lastupdated
+

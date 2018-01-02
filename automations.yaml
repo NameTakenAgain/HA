@@ -1,0 +1,72 @@
+- alias: Turn on dressing room and tv room lights when there is movement in tvroom
+  trigger:
+    - platform: state
+      entity_id: sensor.motion_tvroom
+      to: 'on'
+    - platform: state
+      entity_id: sensor.motion_dressingroom
+      to: 'on'
+  action:
+    - service: homeassistant.turn_on 
+      entity_id: script.both_lights_on_off_in_30_sec
+      
+- alias: TV on
+  trigger:
+    - platform: state
+      entity_id: sensor.current_activity
+      from: 'PowerOff'
+  action:
+    - service: homeassistant.turn_on 
+      entity_id: script.both_lights_off
+
+- alias: TV off
+  trigger:
+    - platform: state
+      entity_id: sensor.current_activity
+      to: 'PowerOff'
+  action:
+    - service: homeassistant.turn_on 
+      entity_id: script.both_lights_on_off_in_30_sec
+
+- alias: Morning time
+  trigger:
+    platform: time
+    at: '06:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.dressingroom_brightness
+        value: 105
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.tvroom_brightness
+        value: 105
+        
+- alias: Day time
+  trigger:
+    platform: time
+    at: '09:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.dressingroom_brightness
+        value: 195
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.tvroom_brightness
+        value: 195
+        
+- alias: Night time
+  trigger:
+    platform: time
+    at: '23:30:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.dressingroom_brightness
+        value: 30
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.tvroom_brightness
+        value: 30
+

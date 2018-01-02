@@ -1,0 +1,5 @@
+*
+!*.yaml
+!.gitignore
+!custom_components
+secrets.yaml

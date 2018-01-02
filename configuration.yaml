@@ -1,0 +1,169 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 59.8585
+  longitude: 17.6454
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 15
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Stockholm
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+  - yamaha
+  - sonos
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Philips Hue
+hue:
+  bridges:
+    - host: 192.168.1.77
+  
+# Track the sun
+sun:
+
+input_number:
+  tvroom_brightness:
+    name: Brightness
+    initial: 180
+    min: 0
+    max: 255
+    step: 15
+  dressingroom_brightness:
+    name: Brightness
+    initial: 180
+    min: 0
+    max: 255
+    step: 15
+
+# Weather prediction
+sensor:
+  - platform: hue_sensor
+  - platform: yr
+  - platform: template
+    sensors:
+      current_activity:
+        friendly_name: "Current Activity"
+        value_template: '{{ states.remote.harmony.attributes.current_activity }}'
+      tvroom_lux:
+        friendly_name: "Ljus 1"
+        entity_id: sensor.motion_tvroom
+        unit_of_measurement: "lux"
+        value_template: "{{ states.sensor.motion_tvroom.attributes.lux }}"
+      tvroom_temperature:
+        friendly_name: "Temp 1"
+        entity_id: sensor.motion_tvroom
+        unit_of_measurement: "C"
+        value_template: "{{ states.sensor.motion_tvroom.attributes.temperature }}"
+      tvroom_switch_lastupdated:
+        friendly_name: "TV room Last Updated"
+        entity_id: sensor.tvroom_switch
+        value_template: "{{ states.sensor.tvroom_switch.attributes.last_updated }}"
+      dressingroom_lux:
+        friendly_name: "Ljus 2"
+        entity_id: sensor.motion_dressingroom
+        unit_of_measurement: "lux"
+        value_template: "{{ states.sensor.motion_dressingroom.attributes.lux }}"
+      dressingroom_temperature:
+        friendly_name: "Temp 2"
+        entity_id: sensor.motion_dressingroom
+        unit_of_measurement: "C"
+        value_template: "{{ states.sensor.motion_dressingroom.attributes.temperature }}"
+      dressingroom_switch_lastupdated:
+        friendly_name: "Dressing room Last Updated"
+        entity_id: sensor.dressingroom_switch
+        value_template: "{{ states.sensor.dressingroom_switch.attributes.last_updated }}"
+
+
+
+# Text to speech
+tts:
+  - platform: google
+
+remote:
+  - platform: harmony
+    name: Harmony 
+    host: 192.168.1.73
+
+
+#emulated_hue:
+#  host_ip: 192.168.1.202
+#  listen_port: 8300
+#  exposed_domains:
+#    - light
+#    - scene
+  
+# scene:
+#   - name: tv_dressing_bright
+#     entities:
+#       light.tvroom_led:
+#         state: on
+#         transition: 2
+#         brightness_pct: 75
+#       light.dressingroom_ceiling:
+#         state: on
+#         transition: 2
+#         brightness_pct: 75
+#   - name: tv_dressing_dim
+#     entities:
+#       light.tvroom_led:
+#         state: on
+#         transition: 2
+#         brightness_pct: 25
+#       light.dressingroom_ceiling:
+#         state: on
+#         transition: 2
+#         brightness_pct: 25
+#   - name: tv_dressing_off
+#     entities:
+#       light.tvroom_led:
+#         state: off
+#         transition: 2
+#       light.dressingroom_ceiling:
+#         state: off
+#         transition: 2
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml

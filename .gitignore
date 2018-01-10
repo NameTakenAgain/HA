@@ -2,4 +2,6 @@
 !*.yaml
 !.gitignore
 !custom_components
+!python_scripts/*.py
 secrets.yaml
+

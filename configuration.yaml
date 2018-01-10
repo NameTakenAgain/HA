@@ -1,6 +1,6 @@
 homeassistant:
   # Name of the location where Home Assistant is running
-  name: Home
+  name: "Villa Villerkulla"
   # Location required to calculate the time the sun rises and sets
   latitude: 59.8585
   longitude: 17.6454
@@ -12,9 +12,6 @@ homeassistant:
   time_zone: Europe/Stockholm
   # Customization file
   customize: !include customize.yaml
-
-# Show links to resources in log and frontend
-introduction:
 
 # Enables the frontend
 frontend:
@@ -52,9 +49,6 @@ history:
 # View all events in a logbook
 logbook:
 
-# Enables a map showing the location of tracked devices
-map:
-
 # Philips Hue
 hue:
   bridges:
@@ -65,18 +59,30 @@ sun:
 
 input_number:
   tvroom_brightness:
-    name: Brightness
-    initial: 180
+    name: "TVroom Brightness"
+    initial: 150
     min: 0
     max: 255
     step: 15
   dressingroom_brightness:
-    name: Brightness
-    initial: 180
+    name: "Dressingroom Brightness"
+    initial: 150
     min: 0
     max: 255
     step: 15
-
+  tvroom_manual_on:
+    name: "TVroom manually set"
+    initial: 0
+    min: 0
+    max: 1
+    step: 1
+  dressingroom_manual_on:
+    name: "Dressingroom manually set"
+    initial: 0
+    min: 0
+    max: 1
+    step: 1
+    
 # Weather prediction
 sensor:
   - platform: hue_sensor
@@ -91,35 +97,38 @@ sensor:
         entity_id: sensor.motion_tvroom
         unit_of_measurement: "lux"
         value_template: "{{ states.sensor.motion_tvroom.attributes.lux }}"
-      tvroom_temperature:
-        friendly_name: "Temp 1"
-        entity_id: sensor.motion_tvroom
-        unit_of_measurement: "C"
-        value_template: "{{ states.sensor.motion_tvroom.attributes.temperature }}"
-      tvroom_switch_lastupdated:
-        friendly_name: "TV room Last Updated"
-        entity_id: sensor.tvroom_switch
-        value_template: "{{ states.sensor.tvroom_switch.attributes.last_updated }}"
       dressingroom_lux:
         friendly_name: "Ljus 2"
         entity_id: sensor.motion_dressingroom
         unit_of_measurement: "lux"
         value_template: "{{ states.sensor.motion_dressingroom.attributes.lux }}"
-      dressingroom_temperature:
-        friendly_name: "Temp 2"
-        entity_id: sensor.motion_dressingroom
-        unit_of_measurement: "C"
-        value_template: "{{ states.sensor.motion_dressingroom.attributes.temperature }}"
-      dressingroom_switch_lastupdated:
-        friendly_name: "Dressing room Last Updated"
-        entity_id: sensor.dressingroom_switch
-        value_template: "{{ states.sensor.dressingroom_switch.attributes.last_updated }}"
+      tvroom_hours:
+        value_template: >
+          {% if is_state("input_number.tvroom_manual_on", "1.0") %}
+          1
+          {% else %}
+          0
+          {% endif %}          
+      dressingroom_hours:
+        value_template: >
+          {% if is_state("input_number.dressingroom_manual_on", "1.0") %}
+          1
+          {% else %}
+          0
+          {% endif %}
+      dressingroom_minutes:
+        value_template: >
+          {% if now().hour < 6 %}
+          0
+          {% elif now().hour < 8 %}
+          3
+          {% elif now().hour < 10 %}
+          15
+          {% else %}
+          0
+          {% endif %}
 
-
-
-# Text to speech
-tts:
-  - platform: google
+python_script:
 
 remote:
   - platform: harmony
@@ -134,36 +143,6 @@ remote:
 #    - light
 #    - scene
   
-# scene:
-#   - name: tv_dressing_bright
-#     entities:
-#       light.tvroom_led:
-#         state: on
-#         transition: 2
-#         brightness_pct: 75
-#       light.dressingroom_ceiling:
-#         state: on
-#         transition: 2
-#         brightness_pct: 75
-#   - name: tv_dressing_dim
-#     entities:
-#       light.tvroom_led:
-#         state: on
-#         transition: 2
-#         brightness_pct: 25
-#       light.dressingroom_ceiling:
-#         state: on
-#         transition: 2
-#         brightness_pct: 25
-#   - name: tv_dressing_off
-#     entities:
-#       light.tvroom_led:
-#         state: off
-#         transition: 2
-#       light.dressingroom_ceiling:
-#         state: off
-#         transition: 2
-
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml

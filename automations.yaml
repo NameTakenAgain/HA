@@ -1,4 +1,4 @@
-- alias: Turn on dressing room and tv room lights when there is movement in tvroom
+- alias: "Motion -> Both lights on"
   trigger:
     - platform: state
       entity_id: sensor.motion_tvroom
@@ -8,9 +8,9 @@
       to: 'on'
   action:
     - service: homeassistant.turn_on 
-      entity_id: script.both_lights_on_off_in_30_sec
+      entity_id: script.both_lights_on_delayed_off
       
-- alias: TV on
+- alias: "TV on -> Lights off"
   trigger:
     - platform: state
       entity_id: sensor.current_activity
@@ -19,16 +19,16 @@
     - service: homeassistant.turn_on 
       entity_id: script.both_lights_off
 
-- alias: TV off
+- alias: "TV off -> Lights on"
   trigger:
     - platform: state
       entity_id: sensor.current_activity
       to: 'PowerOff'
   action:
     - service: homeassistant.turn_on 
-      entity_id: script.both_lights_on_off_in_30_sec
+      entity_id: script.both_lights_on_delayed_off
 
-- alias: Morning time
+- alias: "Time: Early morning"
   trigger:
     platform: time
     at: '06:00:00'
@@ -36,13 +36,27 @@
     - service: input_number.set_value
       data:
         entity_id: input_number.dressingroom_brightness
-        value: 105
+        value: 90
     - service: input_number.set_value
       data:
         entity_id: input_number.tvroom_brightness
-        value: 105
+        value: 90
         
-- alias: Day time
+- alias: "Time: Late morning"
+  trigger:
+    platform: time
+    at: '08:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.dressingroom_brightness
+        value: 120
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.tvroom_brightness
+        value: 120
+        
+- alias: "Time: Day time"
   trigger:
     platform: time
     at: '09:00:00'
@@ -50,13 +64,13 @@
     - service: input_number.set_value
       data:
         entity_id: input_number.dressingroom_brightness
-        value: 195
+        value: 150
     - service: input_number.set_value
       data:
         entity_id: input_number.tvroom_brightness
-        value: 195
-        
-- alias: Night time
+        value: 150
+
+- alias: "Time: Night time"
   trigger:
     platform: time
     at: '23:30:00'
@@ -70,3 +84,16 @@
         entity_id: input_number.tvroom_brightness
         value: 30
 
+- alias: "Hue remote TV room"
+  trigger:
+  - platform: state
+    entity_id: sensor.tvroom_switch
+  action:
+  - service: python_script.hue_remote_tvroom
+    
+- alias: "Hue remote Dressing room"
+  trigger:
+  - platform: state
+    entity_id: sensor.dressingroom_switch
+  action:
+  - service: python_script.hue_remote_dressingroom

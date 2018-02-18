@@ -10,11 +10,33 @@
     - service: homeassistant.turn_on 
       entity_id: script.both_lights_on_delayed_off
       
+- alias: "No Motion -> Both lights off, delayed"
+  trigger:
+    - platform: state
+      entity_id: sensor.motion_tvroom
+      to: 'off'
+    - platform: state
+      entity_id: sensor.motion_dressingroom
+      to: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: template
+        value_template: '{{ is_state("sensor.motion_dressingroom", "off") }}'
+      - condition: template
+        value_template: '{{ is_state("sensor.motion_tvroom", "off") }}'
+  action:
+    - service: homeassistant.turn_on 
+      entity_id: script.both_lights_delayed_off
+      
 - alias: "TV on -> Lights off"
   trigger:
     - platform: state
       entity_id: sensor.current_activity
-      from: 'PowerOff'
+      to : 'BBTV'
+    - platform: state
+      entity_id: sensor.current_activity
+      to : 'Shield'
   action:
     - service: homeassistant.turn_on 
       entity_id: script.both_lights_off
@@ -36,7 +58,7 @@
     - service: input_number.set_value
       data:
         entity_id: input_number.dressingroom_brightness
-        value: 90
+        value: 75
     - service: input_number.set_value
       data:
         entity_id: input_number.tvroom_brightness
@@ -78,7 +100,7 @@
     - service: input_number.set_value
       data:
         entity_id: input_number.dressingroom_brightness
-        value: 30
+        value: 15
     - service: input_number.set_value
       data:
         entity_id: input_number.tvroom_brightness
@@ -97,3 +119,24 @@
     entity_id: sensor.dressingroom_switch
   action:
   - service: python_script.hue_remote_dressingroom
+
+- alias: "Livingroom ON"
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:45:00'
+  action:
+    service: switch.turn_on
+    entity_id:
+      - "switch.sonoff0502"
+      - "switch.sonoff4995"
+
+- alias: "Livingroom OFF"
+  trigger:
+    platform: time
+    at: '23:45:00'
+  action:
+    service: switch.turn_off
+    entity_id:
+      - "switch.sonoff0502"
+      - "switch.sonoff4995"

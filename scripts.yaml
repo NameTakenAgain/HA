@@ -20,12 +20,9 @@ tvroom_force:
       data_template:
         entity_id: light.tvroom_led
         brightness: "{{ states('input_number.tvroom_brightness') | int }}"
-    - service: script.turn_on
-      data:
-        entity_id: script.tvroom_delayed_off
 
 #
-# Turn ON the the lights in the TV room, unless the TV is ON
+# Turn ON the lights in the TV room, unless the TV is ON
 #
 # This script is called from automations triggered by the motion
 # sensor. The light should only be turnd on if the TV is off.
@@ -74,9 +71,6 @@ dressingroom_on:
       data_template:
         entity_id: light.dressingroom_ceiling
         brightness: "{{ states('input_number.dressingroom_brightness') | int }}"
-    - service: script.turn_on
-      data:
-        entity_id: script.dressingroom_delayed_off
 
 
 #
@@ -107,6 +101,21 @@ both_lights_on_delayed_off:
     - service: script.turn_on
       data:
         entity_id: script.tvroom_on
+
+#
+# Turn ON both lights
+#
+# This script is called from the motion sensor automation.
+#
+both_lights_delayed_off:
+  alias: "Both ON, set timer"
+  sequence:
+    - service: script.turn_on
+      data:
+        entity_id: script.dressingroom_delayed_off
+    - service: script.turn_on
+      data:
+        entity_id: script.tvroom_delayed_off
 
 #
 # Turn OFF both lights
@@ -226,4 +235,3 @@ dressingroom_button_4:
     - service: homeassistant.turn_off
       data:
         entity_id: light.dressingroom_ceiling
-

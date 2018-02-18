@@ -10,4 +10,3 @@ dalle:
     - sensor.dressingroom_temperature
     - sensor.dressingroom_switch
     - sensor.dressingroom_switch_lastupdated
-

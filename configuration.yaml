@@ -46,6 +46,10 @@ conversation:
 # Enables support for tracking state changes over time
 history:
 
+recorder:
+  purge_interval: 1
+  purge_keep_days: 5
+
 # View all events in a logbook
 logbook:
 
@@ -57,6 +61,27 @@ hue:
 # Track the sun
 sun:
 
+mqtt:
+  broker: 192.168.1.202
+  username: "HomeAssistant"
+  password: "BurkGurk"
+
+switch:
+  - platform: mqtt
+    name: "sonoff-0502"
+    state_topic: "stat/sonoff_0502/POWER"
+    command_topic: "cmnd/sonoff_0502/POWER"
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "sonoff-4995"
+    state_topic: "stat/sonoff_4995/POWER"
+    command_topic: "cmnd/sonoff_4995/POWER"
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  
 input_number:
   tvroom_brightness:
     name: "TVroom Brightness"
@@ -85,7 +110,7 @@ input_number:
     
 # Weather prediction
 sensor:
-  - platform: hue_sensor
+  - platform: hue
   - platform: yr
   - platform: template
     sensors:
@@ -94,12 +119,10 @@ sensor:
         value_template: '{{ states.remote.harmony.attributes.current_activity }}'
       tvroom_lux:
         friendly_name: "Ljus 1"
-        entity_id: sensor.motion_tvroom
         unit_of_measurement: "lux"
         value_template: "{{ states.sensor.motion_tvroom.attributes.lux }}"
       dressingroom_lux:
         friendly_name: "Ljus 2"
-        entity_id: sensor.motion_dressingroom
         unit_of_measurement: "lux"
         value_template: "{{ states.sensor.motion_dressingroom.attributes.lux }}"
       tvroom_hours:

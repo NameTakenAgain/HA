@@ -111,6 +111,8 @@ input_number:
 # Weather prediction
 sensor:
   - platform: hue
+    ip_address: 192.168.1.77
+    token: zMHZEypUOcxwO3TSp1ed-ZL3e1jmWVgAJsdENlgs
   - platform: yr
   - platform: template
     sensors:
@@ -150,6 +152,13 @@ sensor:
           {% else %}
           0
           {% endif %}
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    # If errors occur, remove degree symbol below
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) }}'
+
 
 python_script:
 
@@ -158,14 +167,87 @@ remote:
     name: Harmony 
     host: 192.168.1.73
 
-
-#emulated_hue:
-#  host_ip: 192.168.1.202
-#  listen_port: 8300
-#  exposed_domains:
-#    - light
-#    - scene
+scene:
+  - name: "Reading light"
+    entities:
+      group.kitchen_table:
+        state: on
+        brightness: 255
+        color_temp: 249
+  - name: "Cozy"
+    entities:
+      group.kitchen_table:
+        state: on
+        brightness: 80
+        color_temp: 458
+  - name: "Morning"
+    entities:
+      group.kitchen_table:
+        state: on
+        brightness: 25
+        color_temp: 458
+  - name: "Windows Off"
+    entities:
+      light.living_room_window_1:
+        state: off
+      light.living_room_window_2:
+        state: off
+      light.living_room_window_3:
+        state: off
+  - name: "Windows On"
+    entities:
+      light.living_room_window_1:
+        state: on
+        brightness: 180
+      light.living_room_window_2:
+        state: on
+        brightness: 180
+      light.living_room_window_3:
+        state: on
+        brightness: 180
+  - name: "Stairs Off"
+    entities:
+      light.stairs_1:
+        state: off
+      light.stairs_2:
+        state: off
+  - name: "Stairs On"
+    entities:
+      light.stairs_1:
+        state: on
+        brightness: 128
+      light.stairs_2:
+        state: on
+        brightness: 128
   
+emulated_hue:
+  expose_by_default: false
+  entities:
+    light.h_stairs:
+      name: "stairs"
+      hidden: false 
+    light.living_room:
+      name: "living room window"
+      hidden: false 
+    light.t_mancave:
+      name: "mancave"
+      hidden: false 
+    light.h_kitchen:
+      name: "ceiling"
+      hidden: false 
+    light.h_dressing_room:
+      name: "dressing room"
+      hidden: false 
+    light.h_tv_room:
+      name: "tv room"
+      hidden: false 
+    scene.cozy:
+      hidden: false
+    scene.reading_light:
+      hidden: false
+    scene.morning:
+      hidden: false
+
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml

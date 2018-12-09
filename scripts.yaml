@@ -190,12 +190,20 @@ dressingroom_button_1:
       data:
         entity_id: input_number.dressingroom_manual_on
         value: 1
+    - service: script.turn_off
+      data:
+        entity_id: script.dressingroom_delayed_off
     - service: script.turn_on
       data:
-        entity_id: script.dressingroom_1h_delay
-    - service: script.turn_on
+        entity_id: script.dressingroom_delayed_off
+    - service: input_number.set_value
       data:
-        entity_id: script.dressingroom_on
+        entity_id: input_number.dressingroom_brightness
+        value: 255
+    - service_template: homeassistant.turn_on
+      data_template:
+        entity_id: light.dressingroom_ceiling
+        brightness: 255
 
 dressingroom_button_2:
   alias: "Dressingroom button 2"

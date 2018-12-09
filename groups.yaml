@@ -10,3 +10,53 @@ dalle:
     - sensor.dressingroom_temperature
     - sensor.dressingroom_switch
     - sensor.dressingroom_switch_lastupdated
+
+living_room_window:
+  entities:
+    - light.living_room_window_1
+    - light.living_room_window_2
+    - light.living_room_window_3
+
+kitchen_ceiling:
+  entities:
+    - light.kitchen_ceiling_1
+    - light.kitchen_ceiling_2
+    - light.kitchen_ceiling_3
+
+kitchen_table:
+  entities:
+    - light.kitchen_table_1
+    - light.kitchen_table_2
+
+stairs:
+  entities:
+    - light.stairs_1
+    - light.stairs_2
+
+upstairs:
+  name: Upstairs
+  view: yes
+  entities:
+    - group.living_room_window
+    - group.kitchen_ceiling
+    - group.kitchen_table
+    - group.stairs
+
+downstairs:
+  name: Downstairs
+  view: yes
+  entities:
+    - light.dressing_room
+    - light.tvroom_led
+
+pi:
+  name: Raspberry Pi
+  entities:
+    - sensor.cpu
+    - sensor.cpu_use
+
+status_view:
+  name: Devices
+  view: yes
+  entities:
+    - group.pi

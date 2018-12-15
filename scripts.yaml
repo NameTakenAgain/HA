@@ -67,6 +67,9 @@ dressingroom_on:
     - service: script.turn_off
       data:
         entity_id: script.dressingroom_delayed_off
+    - service: script.turn_on
+      data:
+        entity_id: script.dressingroom_delayed_off
     - service_template: homeassistant.turn_on
       data_template:
         entity_id: light.dressingroom_ceiling

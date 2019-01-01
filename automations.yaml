@@ -12,7 +12,9 @@
   action:
     - service: homeassistant.turn_on 
       entity_id: script.both_lights_on_delayed_off
-      
+
+# This script is started when any motion sensor reverts to its off state
+# It should only start the delayed turn off script when all sensors are off
 - alias: "No Motion -> Both lights off, delayed"
   trigger:
     - platform: state

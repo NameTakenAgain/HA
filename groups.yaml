@@ -1,17 +1,17 @@
 dalle:
   entities:
-    - sensor.motion_tvroom
-    - sensor.tvroom_lux
-    - sensor.tvroom_temperature
+    - binary_sensor.motion_tvroom
+    - binary_sensor.tvroom_lx
+    - binary_sensor.tvroom_temperature
     - sensor.tvroom_switch
-    - sensor.tvroom_switch_lastupdated
+    - sensor.tvroom_switch_last_updated
     - sensor.tvroom_hours
-    - sensor.motion_dressingroom
-    - sensor.dressingroom_motion_2
-    - sensor.dressingroom_lux
-    - sensor.dressingroom_temperature
+    - binary_sensor.motion_dressingroom
+    - binary_sensor.dressingroom_motion_2
+    - binary_sensor.dressingroom_lx
+    - binary_sensor.dressingroom_temperature
     - sensor.dressingroom_switch
-    - sensor.dressingroom_switch_lastupdated
+    - sensor.dressingroom_switch_last_updated
     - sensor.dressingroom_hours
     - sensor.dressingroom_minutes
 
@@ -33,35 +33,31 @@ kitchen_table:
     - light.kitchen_table_1
     - light.kitchen_table_2
 
-stairs:
-  entities:
-    - light.stairs_1
-    - light.stairs_2
+# upstairs:
+#   name: Upstairs
+#   view: yes
+#   entities:
+#     - group.living_room_window
+#     - group.kitchen_ceiling
+#     - group.kitchen_table
 
-upstairs:
-  name: Upstairs
-  view: yes
-  entities:
-    - group.living_room_window
-    - group.kitchen_ceiling
-    - group.kitchen_table
+# downstairs:
+#   name: Downstairs
+#   view: yes
+#   entities:
+#     - light.dressingroom_ceiling
+#     - light.tvroom_led
+#     - group.stairs
 
-downstairs:
-  name: Downstairs
-  view: yes
-  entities:
-    - light.dressingroom_ceiling
-    - light.tvroom_led
-    - group.stairs
+# pi:
+#   name: Raspberry Pi
+#   entities:
+#     - sensor.cpu
+#     - sensor.cpu_use
 
-pi:
-  name: Raspberry Pi
-  entities:
-    - sensor.cpu
-    - sensor.cpu_use
-
-status_view:
-  name: Devices
-  view: yes
-  entities:
-    - group.pi
+# status_view:
+#   name: Devices
+#   view: yes
+#   entities:
+#     - group.pi
+    

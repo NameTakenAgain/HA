@@ -1,13 +1,13 @@
 - alias: "Motion -> Both lights on"
   trigger:
     - platform: state
-      entity_id: sensor.motion_tvroom
+      entity_id: binary_sensor.motion_tvroom
       to: 'on'
     - platform: state
-      entity_id: sensor.motion_dressingroom
+      entity_id: binary_sensor.motion_dressingroom
       to: 'on'
     - platform: state
-      entity_id: sensor.dressingroom_motion_2
+      entity_id: binary_sensor.dressingroom_motion_2
       to: 'on'
   action:
     - service: homeassistant.turn_on 
@@ -18,23 +18,23 @@
 - alias: "No Motion -> Both lights off, delayed"
   trigger:
     - platform: state
-      entity_id: sensor.motion_tvroom
+      entity_id: binary_sensor.motion_tvroom
       to: 'off'
     - platform: state
-      entity_id: sensor.motion_dressingroom
+      entity_id: binary_sensor.motion_dressingroom
       to: 'off'
     - platform: state
-      entity_id: sensor.dressingroom_motion_2
+      entity_id: binary_sensor.dressingroom_motion_2
       to: 'off'
   condition:
     condition: and
     conditions:
       - condition: template
-        value_template: '{{ is_state("sensor.motion_dressingroom", "off") }}'
+        value_template: '{{ is_state("binary_sensor.motion_dressingroom", "off") }}'
       - condition: template
-        value_template: '{{ is_state("sensor.dressingroom_motion_2", "off") }}'
+        value_template: '{{ is_state("binary_sensor.dressingroom_motion_2", "off") }}'
       - condition: template
-        value_template: '{{ is_state("sensor.motion_tvroom", "off") }}'
+        value_template: '{{ is_state("binary_sensor.motion_tvroom", "off") }}'
   action:
     - service: homeassistant.turn_on 
       entity_id: script.both_lights_delayed_off
@@ -159,7 +159,6 @@
     service: scene.turn_on
     entity_id:
       - scene.windows_on
-      - scene.stairs_on
 
 - alias: "Sunrise"
   trigger:
